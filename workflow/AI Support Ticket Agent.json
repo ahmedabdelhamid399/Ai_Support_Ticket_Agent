@@ -1,0 +1,1801 @@
+{
+  "name": "AI Support Ticket Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "                           Trigger Layer\n                          \n\n\nWatches Airtable every 1 minute.\nOnly picks up tickets where Status = \"New\".\nPasses ticket data to the validation layer.",
+        "height": 80,
+        "width": 614,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -512,
+        -208
+      ],
+      "id": "60344603-2030-48a4-b6d6-9a9812621f69",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "4cd367ba-f3c9-4248-9fbe-2df0ba10f88a",
+              "leftValue": "={{ $('Normalize Ticket Data').item.json.isValid}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        656,
+        0
+      ],
+      "id": "3f35c365-2f07-4428-9070-83f5ba061756",
+      "name": "Validate Ticket Data"
+    },
+    {
+      "parameters": {
+        "content": "                        Validation Layer\n\n\n\nChecks that ticket has:\n- Title (not empty)\n- Issue (not empty)\n- Status = \"New\"\n\nTRUE  → Continue to AI Layer\nFALSE → Mark ticket as Skipped",
+        "height": 80,
+        "width": 566,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        192,
+        -208
+      ],
+      "id": "a02b22ca-f026-4c9b-b185-d1b7418c902c",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appFIFZOjn74OK6ow",
+          "mode": "list",
+          "cachedResultName": "Support Ticket Agent",
+          "cachedResultUrl": "https://airtable.com/appFIFZOjn74OK6ow"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblfExay1yZpx4QLs",
+          "mode": "list",
+          "cachedResultName": "Tickets",
+          "cachedResultUrl": "https://airtable.com/appFIFZOjn74OK6ow/tblfExay1yZpx4QLs"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Status": "Skipped",
+            "Error Log": "Ticket skipped: Missing Title or Issue field",
+            "id": "={{ $json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Ticket ID",
+              "displayName": "Ticket ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "User",
+              "displayName": "User",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Customer Email",
+              "displayName": "Customer Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Issue",
+              "displayName": "Issue",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Priority",
+              "displayName": "Priority",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Low",
+                  "value": "Low"
+                },
+                {
+                  "name": "Medium",
+                  "value": "Medium"
+                },
+                {
+                  "name": "High",
+                  "value": "High"
+                },
+                {
+                  "name": "Critical",
+                  "value": "Critical"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Date Submitted",
+              "displayName": "Date Submitted",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "New",
+                  "value": "New"
+                },
+                {
+                  "name": "Processiong",
+                  "value": "Processiong"
+                },
+                {
+                  "name": "Summarized",
+                  "value": "Summarized"
+                },
+                {
+                  "name": "Skipped",
+                  "value": "Skipped"
+                },
+                {
+                  "name": "Error",
+                  "value": "Error"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "AI Summary",
+              "displayName": "AI Summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email Subject",
+              "displayName": "Email Subject",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email Content",
+              "displayName": "Email Content",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Processed At",
+              "displayName": "Processed At",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Error Log",
+              "displayName": "Error Log",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Created Time",
+              "displayName": "Created Time",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        656,
+        272
+      ],
+      "id": "aedd04ba-0d9a-49ef-9424-a997434e9b2f",
+      "name": "Mark as Skipped",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "wAylloEtEm7c9lqj",
+          "name": "Airtable Support Agent"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst results = [];\n\nfor (const item of items) {\n  const raw = item.json;\n  \n  // Handle both nested and flat structures\n  const fields = raw.fields || raw;\n\n  // Safely extract all fields\n  const title = (fields.Title ?? fields.title ?? \"\").toString().trim();\n  const issue = (fields.Issue ?? fields.issue ?? \"\").toString().trim();\n  const status = (fields.Status ?? fields.status ?? \"\").toString().trim();\n  const user = (fields.User ?? fields.user ?? \"\").toString().trim();\n  const customerEmail = (fields[\"Customer Email\"] ?? fields.customerEmail ?? \"\").toString().trim();\n  const priority = (fields.Priority ?? fields.priority ?? \"\").toString().trim();\n  const dateSubmitted = (fields[\"Date Submitted\"] ?? fields.dateSubmitted ?? \"\").toString().trim();\n  const ticketId = (fields[\"Ticket ID\"] ?? fields.ticketId ?? \"\").toString().trim();\n  const recordId = raw.id ?? fields.id ?? \"\";\n\n  // Validation\n  const titleValid = title.length > 0;\n  const issueValid = issue.length > 0;\n  const statusValid = status === \"New\" || status === \"Processing\";\n  const isValid = titleValid && issueValid && statusValid;\n\n  results.push({\n    json: {\n      id: recordId,\n      ticketId: ticketId,\n      title: title,\n      issue: issue,\n      status: status,\n      user: user,\n      customerEmail: customerEmail,\n      priority: priority,\n      dateSubmitted: dateSubmitted,\n      isValid: isValid,\n      debug_titleValid: titleValid,\n      debug_issueValid: issueValid,\n      debug_statusValid: statusValid\n    }\n  });\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        192,
+        128
+      ],
+      "id": "7143635d-1668-4049-98ba-5d4054828f17",
+      "name": "Normalize Ticket Data"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "groqApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"llama-3.3-70b-versatile\",\n  \"temperature\": 0.3,\n  \"max_tokens\": 1000,\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are an expert IT support analyst working for a professional IT Support Team. Analyze support tickets and generate structured professional output. Always respond in valid JSON format only. No extra text, no markdown, no code blocks.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"=Analyze this support ticket and respond ONLY in this exact JSON structure:\\n{\\n  \\\"summary\\\": \\\"Professional 2-3 sentence summary\\\",\\n  \\\"priority\\\": \\\"Low or Medium or High or Critical\\\",\\n  \\\"priority_reason\\\": \\\"One sentence explaining priority\\\",\\n  \\\"email_subject\\\": \\\"Professional email subject line\\\",\\n  \\\"email_content\\\": \\\"Professional email body with bullet points signed by IT Support Team\\\",\\n  \\\"suggested_reply\\\": \\\"Professional 2-3 sentence reply to customer\\\",\\n  \\\"estimated_resolution\\\": \\\"Estimated time to resolve\\\"\\n}\\n\\nTicket Details:\\nTicket ID: {{ $json.ticketId }}\\nUser: {{ $json.user }}\\nIssue: {{ $json.issue }}\\nPriority: {{ $json.priority }}\\nDate Submitted: {{ $json.dateSubmitted }}\\nStatus: {{ $json.status }}\\n\\nInstructions for email_content:\\n- Start with: Dear Support Manager,\\n- Include all ticket details with labels\\n- Use bullet points for issue summary\\n- End with: Best regards, IT Support Team\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        880,
+        0
+      ],
+      "id": "a2036e70-fd8c-4219-acc8-e057630cb711",
+      "name": "Summarize with AI",
+      "retryOnFail": false,
+      "credentials": {
+        "groqApi": {
+          "id": "vUQasnja6hfnoUJ4",
+          "name": "Groq - Support Agent"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst results = [];\n\nfor (const item of items) {\n  // Get raw response from Groq\n  let rawContent = item.json.choices?.[0]?.message?.content || \"\";\n\n  let parsed = {};\n  let parseSuccess = false;\n\n  // Clean the raw content first\n  let cleaned = rawContent\n    .replace(/```json/g, \"\")\n    .replace(/```/g, \"\")\n    .trim();\n\n  // Attempt 1: Parse directly\n  try {\n    parsed = JSON.parse(cleaned);\n    parseSuccess = true;\n  } catch (e1) {\n\n    // Attempt 2: Find JSON object using regex\n    try {\n      const jsonMatch = cleaned.match(/\\{[\\s\\S]*\\}/);\n      if (jsonMatch) {\n        parsed = JSON.parse(jsonMatch[0]);\n        parseSuccess = true;\n      }\n    } catch (e2) {\n\n      // Attempt 3: Fix unescaped newlines inside string values\n      try {\n        const fixed = cleaned\n          .replace(/:\\s*\"([\\s\\S]*?)\"/g, (match, p1) => {\n            const fixedValue = p1\n              .replace(/\\n/g, \"\\\\n\")\n              .replace(/\\r/g, \"\\\\r\")\n              .replace(/\\t/g, \"\\\\t\");\n            return `: \"${fixedValue}\"`;\n          });\n        parsed = JSON.parse(fixed);\n        parseSuccess = true;\n      } catch (e3) {\n\n        // Attempt 4: Manually extract each field using regex\n        try {\n          const extract = (field) => {\n            const regex = new RegExp(`\"${field}\"\\\\s*:\\\\s*\"([\\\\s\\\\S]*?)\"(?=\\\\s*,\\\\s*\"|\\\\s*\\\\})`);\n            const match = cleaned.match(regex);\n            return match ? match[1].replace(/\\\\n/g, \"\\n\") : \"\";\n          };\n\n          parsed = {\n            summary: extract(\"summary\"),\n            priority: extract(\"priority\"),\n            priority_reason: extract(\"priority_reason\"),\n            email_subject: extract(\"email_subject\"),\n            email_content: extract(\"email_content\"),\n            suggested_reply: extract(\"suggested_reply\"),\n            estimated_resolution: extract(\"estimated_resolution\")\n          };\n\n          // Check if we got at least summary\n          if (parsed.summary) {\n            parseSuccess = true;\n          }\n        } catch (e4) {\n          parseSuccess = false;\n        }\n      }\n    }\n  }\n\n  // Final fallback\n  if (!parseSuccess || !parsed.summary) {\n    parsed = {\n      summary: \"Could not parse AI response\",\n      priority: \"Medium\",\n      priority_reason: \"Default priority due to parsing error\",\n      email_subject: \"New Support Ticket Received\",\n      email_content: cleaned,\n      suggested_reply: \"Thank you for contacting support.\",\n      estimated_resolution: \"Unknown\"\n    };\n  }\n\n  results.push({\n    json: {\n      summary: parsed.summary || \"\",\n      priority: parsed.priority || \"Medium\",\n      priority_reason: parsed.priority_reason || \"\",\n      email_subject: parsed.email_subject || \"\",\n      email_content: parsed.email_content || \"\",\n      suggested_reply: parsed.suggested_reply || \"\",\n      estimated_resolution: parsed.estimated_resolution || \"\"\n    }\n  });\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1104,
+        0
+      ],
+      "id": "df590fed-5079-4c2a-993a-f50d907477ab",
+      "name": "Parse AI Response"
+    },
+    {
+      "parameters": {
+        "content": "              AI Layer\n\n\nProvider: Groq (Free)\nModel: llama3-8b-8192\n\nNode 1: 🤖 Summarize with AI\n  - HTTP Request to Groq API\n  - Temp: 0.3 (consistent output)\n  - Returns structured JSON\n\nNode 2: 🧹 Parse AI Response\n  - Extracts JSON from response\n  - Handles parsing errors safely\n  - Passes all data to email layer",
+        "height": 80,
+        "width": 326,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        864,
+        -208
+      ],
+      "typeVersion": 1,
+      "id": "3794010f-e113-4203-9acb-b4f90ce2e1f1",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1568,
+        144
+      ],
+      "id": "833b1b74-e225-4e37-9de3-46181bb5356b",
+      "name": "Merge Ticket + AI Data"
+    },
+    {
+      "parameters": {
+        "content": "      Send Email Layer\n────────────\nNode: 📧 Send to Support Manager\n\nSends HTML email to support manager\ncontaining full AI generated report.\n\nFields used:\n- email_subject  → Subject line\n- email_content  → Full report body\n- summary        → AI summary box\n- priority       → Priority badge\n- suggested_reply → Reply suggestion\n- customerEmail  → Recipient",
+        "height": 80,
+        "width": 230
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1680,
+        -208
+      ],
+      "typeVersion": 1,
+      "id": "fd710ba4-5cc2-4f57-a135-6ae39839a04d",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.customerEmail }}",
+        "subject": "={{ $json.email_subject }}",
+        "message": "==<html>\n<head>\n  <style>\n    body {\n      font-family: Arial, sans-serif;\n      background-color: #f4f4f4;\n      margin: 0;\n      padding: 0;\n    }\n    .container {\n      max-width: 600px;\n      margin: 30px auto;\n      background-color: #ffffff;\n      border-radius: 8px;\n      overflow: hidden;\n      border: 1px solid #e0e0e0;\n    }\n    .header {\n      background-color: #1a1a2e;\n      color: #ffffff;\n      padding: 24px 30px;\n    }\n    .header h2 {\n      margin: 0;\n      font-size: 20px;\n    }\n    .header p {\n      margin: 4px 0 0;\n      opacity: 0.7;\n      font-size: 13px;\n    }\n    .priority-badge {\n      display: inline-block;\n      padding: 4px 14px;\n      border-radius: 20px;\n      font-size: 12px;\n      font-weight: bold;\n      color: #ffffff;\n      background-color: #e53935;\n    }\n    .section {\n      padding: 16px 30px;\n      border-bottom: 1px solid #eeeeee;\n    }\n    .label {\n      font-size: 11px;\n      color: #888888;\n      text-transform: uppercase;\n      letter-spacing: 1px;\n      margin-bottom: 4px;\n    }\n    .value {\n      font-size: 15px;\n      color: #222222;\n      line-height: 1.6;\n    }\n    .ai-box {\n      background-color: #f0f7ff;\n      border-left: 4px solid #1565c0;\n      padding: 16px 20px;\n      margin: 16px 30px;\n      border-radius: 4px;\n    }\n    .ai-box .label {\n      color: #1565c0;\n    }\n    .footer {\n      padding: 16px 30px;\n      font-size: 12px;\n      color: #aaaaaa;\n      text-align: center;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n\n    <!-- Header -->\n    <div class=\"header\">\n      <h2>🎫 New Support Ticket</h2>\n      <p>Automated AI Summary Report</p>\n    </div>\n\n    <!-- Priority -->\n    <div class=\"section\">\n      <div class=\"label\">Priority Level</div>\n      <span class=\"priority-badge\">{{ $json.priority }}</span>\n      <div class=\"value\" style=\"margin-top:8px;font-size:13px;color:#555;\">\n        {{ $json.priority_reason }}\n      </div>\n    </div>\n\n    <!-- Ticket Details -->\n    <div class=\"section\">\n      <div class=\"label\">Ticket Details</div>\n      <div class=\"value\">\n        <b>Ticket ID:</b> #{{ $json.ticketId }}<br>\n        <b>User:</b> {{ $json.user }}<br>\n        <b>Issue:</b> {{ $json.issue }}<br>\n        <b>Date Submitted:</b> {{ $json.dateSubmitted }}<br>\n        <b>Status:</b> {{ $json.status }}\n      </div>\n    </div>\n\n    <!-- AI Summary -->\n    <div class=\"ai-box\">\n      <div class=\"label\">🤖 AI Summary</div>\n      <div class=\"value\">{{ $json.summary }}</div>\n    </div>\n\n    <!-- Email Content -->\n    <div class=\"section\">\n      <div class=\"label\">Full Report</div>\n      <div class=\"value\">{{ $json.email_content }}</div>\n    </div>\n\n    <!-- Suggested Reply -->\n    <div class=\"section\">\n      <div class=\"label\">💬 Suggested Customer Reply</div>\n      <div class=\"value\" style=\"color:#555;font-style:italic;\">\n        {{ $json.suggested_reply }}\n      </div>\n    </div>\n\n    <!-- Estimated Resolution -->\n    <div class=\"section\">\n      <div class=\"label\">⏱ Estimated Resolution</div>\n      <div class=\"value\">{{ $json.estimated_resolution }}</div>\n    </div>\n\n    <!-- Footer -->\n    <div class=\"footer\">\n      Generated automatically by AI Support Agent<br>\n      Powered by n8n + Groq (Llama 3) + Airtable<br>\n      <b>IT Support Team</b>\n    </div>\n\n  </div>\n</body>\n</html>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1776,
+        -16
+      ],
+      "id": "525b36a2-6028-4080-8632-0db154d6dd25",
+      "name": "Send To Support Team",
+      "webhookId": "9be0bcfd-2d53-4f04-887d-ace3e986be9c",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "DuOJSvnSHneSkMQU",
+          "name": "Gmail Support Agent"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appFIFZOjn74OK6ow",
+          "mode": "list",
+          "cachedResultName": "Support Ticket Agent",
+          "cachedResultUrl": "https://airtable.com/appFIFZOjn74OK6ow"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblfExay1yZpx4QLs",
+          "mode": "list",
+          "cachedResultName": "Tickets",
+          "cachedResultUrl": "https://airtable.com/appFIFZOjn74OK6ow/tblfExay1yZpx4QLs"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Status": "Summarized",
+            "AI Summary": "={{ $('Merge Ticket + AI Data').item.json.summary }}",
+            "Email Subject": "={{ $('Merge Ticket + AI Data').item.json.email_subject }}",
+            "Email Content": "={{ $('Merge Ticket + AI Data').item.json.email_content }}",
+            "Processed At": "={{ new Date().toISOString() }}",
+            "Priority": "={{ $('Merge Ticket + AI Data').item.json.priority }}",
+            "id": "={{ $('Merge Ticket + AI Data').item.json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Ticket ID",
+              "displayName": "Ticket ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "User",
+              "displayName": "User",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Customer Email",
+              "displayName": "Customer Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Issue",
+              "displayName": "Issue",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Priority",
+              "displayName": "Priority",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Low",
+                  "value": "Low"
+                },
+                {
+                  "name": "Medium",
+                  "value": "Medium"
+                },
+                {
+                  "name": "High",
+                  "value": "High"
+                },
+                {
+                  "name": "Critical",
+                  "value": "Critical"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Date Submitted",
+              "displayName": "Date Submitted",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "New",
+                  "value": "New"
+                },
+                {
+                  "name": "Processiong",
+                  "value": "Processiong"
+                },
+                {
+                  "name": "Summarized",
+                  "value": "Summarized"
+                },
+                {
+                  "name": "Skipped",
+                  "value": "Skipped"
+                },
+                {
+                  "name": "Error",
+                  "value": "Error"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "AI Summary",
+              "displayName": "AI Summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email Subject",
+              "displayName": "Email Subject",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email Content",
+              "displayName": "Email Content",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Processed At",
+              "displayName": "Processed At",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Error Log",
+              "displayName": "Error Log",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Created Time",
+              "displayName": "Created Time",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        2064,
+        -16
+      ],
+      "id": "193d4fa3-c92b-4a9b-82cf-fbceb0c2ec28",
+      "name": "Update Ticket: Summarized",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "wAylloEtEm7c9lqj",
+          "name": "Airtable Support Agent"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "     LOGGING Layer\n\n\nNode: ✅ Update Ticket: Summarized\n\nAfter email is sent successfully,\nupdates Airtable ticket with:\n- Status      → Summarized\n- AI Summary  → AI generated summary\n- Email Subject → Generated subject\n- Email Content → Generated content\n- Priority    → AI detected priority\n- Processed At → Current timestamp\n\nCreates full audit trail for every ticket.",
+        "height": 80,
+        "width": 192,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2000,
+        -208
+      ],
+      "typeVersion": 1,
+      "id": "11f10362-c66f-47c0-a32a-7b4610124f88",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "2c61fc6e-709e-4736-b6cb-32d30fb5d3b0",
+              "leftValue": "={{ $json.summary }}",
+              "rightValue": "Could not parse AI response",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1328,
+        0
+      ],
+      "id": "e920e65a-2907-4eda-9cc0-84b2a8d2774b",
+      "name": "Check for Errors"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appFIFZOjn74OK6ow",
+          "mode": "list",
+          "cachedResultName": "Support Ticket Agent",
+          "cachedResultUrl": "https://airtable.com/appFIFZOjn74OK6ow"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblfExay1yZpx4QLs",
+          "mode": "list",
+          "cachedResultName": "Tickets",
+          "cachedResultUrl": "https://airtable.com/appFIFZOjn74OK6ow/tblfExay1yZpx4QLs"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Validate Ticket Data').item.json.id }}",
+            "Status": "Error",
+            "Error Log": "={{ \"Email sending failed at: \" + new Date().toISOString() }}",
+            "Processed At": "={{ new Date().toISOString() }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Ticket ID",
+              "displayName": "Ticket ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "User",
+              "displayName": "User",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Customer Email",
+              "displayName": "Customer Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Issue",
+              "displayName": "Issue",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Priority",
+              "displayName": "Priority",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Low",
+                  "value": "Low"
+                },
+                {
+                  "name": "Medium",
+                  "value": "Medium"
+                },
+                {
+                  "name": "High",
+                  "value": "High"
+                },
+                {
+                  "name": "Critical",
+                  "value": "Critical"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Date Submitted",
+              "displayName": "Date Submitted",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "New",
+                  "value": "New"
+                },
+                {
+                  "name": "Processiong",
+                  "value": "Processiong"
+                },
+                {
+                  "name": "Summarized",
+                  "value": "Summarized"
+                },
+                {
+                  "name": "Skipped",
+                  "value": "Skipped"
+                },
+                {
+                  "name": "Error",
+                  "value": "Error"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "AI Summary",
+              "displayName": "AI Summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email Subject",
+              "displayName": "Email Subject",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email Content",
+              "displayName": "Email Content",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Processed At",
+              "displayName": "Processed At",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Error Log",
+              "displayName": "Error Log",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Created Time",
+              "displayName": "Created Time",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        1760,
+        272
+      ],
+      "id": "7d9a5a0e-8596-465f-99bd-f6d4fa9f689d",
+      "name": "Handle Email Error",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "wAylloEtEm7c9lqj",
+          "name": "Airtable Support Agent"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "     Error Handling Layer\n─────────────\nNode 1: 🔎 Check for Errors\n  Checks if AI parsing succeeded\n  TRUE  → Continue to email\n  FALSE → Log error to Airtable\n\nNode 2: ❌ Handle Errors\n  Logs AI failures to Airtable\n  Sets Status → Error\n  Records timestamp + error details\n\nNode 3: ❌ Handle Email Error\n  Logs Gmail failures to Airtable\n  Sets Status → Error\n  Records timestamp\n\nNo ticket ever gets lost silently.\nEvery failure is tracked and logged.",
+        "height": 80,
+        "width": 256
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1248,
+        -208
+      ],
+      "typeVersion": 1,
+      "id": "c1a75ffb-e679-424b-a630-2faa4e23e5ef",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appFIFZOjn74OK6ow",
+          "mode": "list",
+          "cachedResultName": "Support Ticket Agent",
+          "cachedResultUrl": "https://airtable.com/appFIFZOjn74OK6ow"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblfExay1yZpx4QLs",
+          "mode": "list",
+          "cachedResultName": "Tickets",
+          "cachedResultUrl": "https://airtable.com/appFIFZOjn74OK6ow/tblfExay1yZpx4QLs"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Status": "Error",
+            "Processed At": "={{ new Date().toISOString() }}",
+            "Error Log": "={{ \"AI Processing failed at: \" + new Date().toISOString() + \" - Summary: \" +$('Parse AI Response').item.json.summary  }}",
+            "id": "={{ $('Validate Ticket Data').item.json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Ticket ID",
+              "displayName": "Ticket ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "User",
+              "displayName": "User",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Customer Email",
+              "displayName": "Customer Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Issue",
+              "displayName": "Issue",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Priority",
+              "displayName": "Priority",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Low",
+                  "value": "Low"
+                },
+                {
+                  "name": "Medium",
+                  "value": "Medium"
+                },
+                {
+                  "name": "High",
+                  "value": "High"
+                },
+                {
+                  "name": "Critical",
+                  "value": "Critical"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Date Submitted",
+              "displayName": "Date Submitted",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "New",
+                  "value": "New"
+                },
+                {
+                  "name": "Processiong",
+                  "value": "Processiong"
+                },
+                {
+                  "name": "Summarized",
+                  "value": "Summarized"
+                },
+                {
+                  "name": "Skipped",
+                  "value": "Skipped"
+                },
+                {
+                  "name": "Error",
+                  "value": "Error"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "AI Summary",
+              "displayName": "AI Summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email Subject",
+              "displayName": "Email Subject",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email Content",
+              "displayName": "Email Content",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Processed At",
+              "displayName": "Processed At",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Error Log",
+              "displayName": "Error Log",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Created Time",
+              "displayName": "Created Time",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        1328,
+        272
+      ],
+      "id": "50005b20-05c8-4995-9370-c2e4ca058ee9",
+      "name": "Handle Ai Errors",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "wAylloEtEm7c9lqj",
+          "name": "Airtable Support Agent"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -464,
+        -32
+      ],
+      "id": "985b3d95-5394-4713-8ea8-d2bc9a818027",
+      "name": "Run Every Minute"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appFIFZOjn74OK6ow",
+          "mode": "list",
+          "cachedResultName": "Support Ticket Agent",
+          "cachedResultUrl": "https://airtable.com/appFIFZOjn74OK6ow"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblfExay1yZpx4QLs",
+          "mode": "list",
+          "cachedResultName": "Tickets",
+          "cachedResultUrl": "https://airtable.com/appFIFZOjn74OK6ow/tblfExay1yZpx4QLs"
+        },
+        "filterByFormula": "{Status} = \"New\"",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -240,
+        -32
+      ],
+      "id": "cc77c4c3-c9f1-4644-88a0-dd204a3f431a",
+      "name": "Get All New Tickets",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "wAylloEtEm7c9lqj",
+          "name": "Airtable Support Agent"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -16,
+        -32
+      ],
+      "id": "be132132-2d34-4d08-9c16-700e364a257c",
+      "name": "Loop Over Tickets"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appFIFZOjn74OK6ow",
+          "mode": "list",
+          "cachedResultName": "Support Ticket Agent",
+          "cachedResultUrl": "https://airtable.com/appFIFZOjn74OK6ow"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblfExay1yZpx4QLs",
+          "mode": "list",
+          "cachedResultName": "Tickets",
+          "cachedResultUrl": "https://airtable.com/appFIFZOjn74OK6ow/tblfExay1yZpx4QLs"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Status": "Processiong",
+            "id": "={{ $json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Ticket ID",
+              "displayName": "Ticket ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "User",
+              "displayName": "User",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Customer Email",
+              "displayName": "Customer Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Issue",
+              "displayName": "Issue",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Priority",
+              "displayName": "Priority",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Low",
+                  "value": "Low"
+                },
+                {
+                  "name": "Medium",
+                  "value": "Medium"
+                },
+                {
+                  "name": "High",
+                  "value": "High"
+                },
+                {
+                  "name": "Critical",
+                  "value": "Critical"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Date Submitted",
+              "displayName": "Date Submitted",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "New",
+                  "value": "New"
+                },
+                {
+                  "name": "Processiong",
+                  "value": "Processiong"
+                },
+                {
+                  "name": "Summarized",
+                  "value": "Summarized"
+                },
+                {
+                  "name": "Skipped",
+                  "value": "Skipped"
+                },
+                {
+                  "name": "Error",
+                  "value": "Error"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "AI Summary",
+              "displayName": "AI Summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email Subject",
+              "displayName": "Email Subject",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email Content",
+              "displayName": "Email Content",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Processed At",
+              "displayName": "Processed At",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Error Log",
+              "displayName": "Error Log",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Created Time",
+              "displayName": "Created Time",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        432,
+        0
+      ],
+      "id": "3c15c528-40ee-483f-9fc5-18ad0264f97b",
+      "name": "Lock Ticket: Processing",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "wAylloEtEm7c9lqj",
+          "name": "Airtable Support Agent"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        208,
+        -96
+      ],
+      "id": "0029d515-5657-4324-8dc8-526bafc40bc5",
+      "name": "No Operation, do nothing"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Validate Ticket Data": {
+      "main": [
+        [
+          {
+            "node": "Summarize with AI",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mark as Skipped",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Ticket Data": {
+      "main": [
+        [
+          {
+            "node": "Merge Ticket + AI Data",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Lock Ticket: Processing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarize with AI": {
+      "main": [
+        [
+          {
+            "node": "Parse AI Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Parse AI Response": {
+      "main": [
+        [
+          {
+            "node": "Check for Errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Ticket + AI Data": {
+      "main": [
+        [
+          {
+            "node": "Send To Support Team",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send To Support Team": {
+      "main": [
+        [
+          {
+            "node": "Update Ticket: Summarized",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Handle Email Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check for Errors": {
+      "main": [
+        [
+          {
+            "node": "Merge Ticket + AI Data",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "Handle Ai Errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Every Minute": {
+      "main": [
+        [
+          {
+            "node": "Get All New Tickets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get All New Tickets": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Tickets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Tickets": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Normalize Ticket Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Ticket: Summarized": {
+      "main": [
+        []
+      ]
+    },
+    "Mark as Skipped": {
+      "main": [
+        []
+      ]
+    },
+    "Lock Ticket: Processing": {
+      "main": [
+        [
+          {
+            "node": "Validate Ticket Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "9bdebb6b-1ac9-41c8-b81d-89b0f12f184b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d7a9ad68d3a4ff59be08bdd57e7270c55b82ba3ba9adb39adf08fd28e9e7cd42"
+  },
+  "id": "eWd46IeaBZb4sw5w",
+  "tags": []
+}
